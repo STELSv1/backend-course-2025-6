@@ -3,6 +3,53 @@ const { program } = require('commander');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, options.cache)
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+});
+const upload = multer({ storage: storage });
+
+app.post('/register', upload.single('photo'), (req, res) => {
+    const { inventory_name, description } = req.body;
+
+    if (!inventory_name) {
+        return res.status(400).send('Inventory name is required'); 
+    }
+
+    const newItem = {
+        id: Date.now().toString(), 
+        name: inventory_name,      
+        description: description || '', 
+        photo: req.file ? req.file.filename : null 
+    };
+
+    inventory.push(newItem);
+    res.status(201).send('Created');
+});
+
+app.post('/search', (req, res) => {
+    const { id, has_photo } = req.body;
+    const item = inventory.find(i => i.id === id);
+
+    if (!item) {
+        return res.status(404).send('Not Found'); 
+    }
+
+    let responseItem = { ...item };
+
+
+    if (has_photo === 'on' && responseItem.photo) {
+        responseItem.description += ` (Photo link: /inventory/${item.id}/photo)`;
+    }
+
+    res.status(200).json(responseItem);
+});
 
 const app = express();
 app.use(express.json());
