@@ -51,6 +51,53 @@ app.post('/search', (req, res) => {
     res.status(200).json(responseItem);
 });
 
+app.get('/inventory/:id', (req, res) => {
+    const item = inventory.find(i => i.id === req.params.id);
+    if (!item) return res.status(404).send('Not Found');
+    
+    const response = { ...item, photoUrl: item.photo ? `/inventory/${item.id}/photo` : null };
+    res.json(response);
+});
+
+app.get('/inventory/:id/photo', (req, res) => {
+    const item = inventory.find(i => i.id === req.params.id);
+    if (!item || !item.photo) return res.status(404).send('Not Found');
+
+    res.setHeader('Content-Type', 'image/jpeg'); // [cite: 82]
+    res.sendFile(path.join(path.resolve(options.cache), item.photo));
+});
+
+
+app.put('/inventory/:id', (req, res) => {
+    const item = inventory.find(i => i.id === req.params.id);
+    if (!item) return res.status(404).send('Not Found');
+
+    if (req.body.name) item.name = req.body.name;
+    if (req.body.description) item.description = req.body.description;
+
+    res.json(item);
+});
+
+
+app.put('/inventory/:id/photo', upload.single('photo'), (req, res) => {
+    const item = inventory.find(i => i.id === req.params.id);
+    if (!item) return res.status(404).send('Not Found');
+    
+    if (req.file) {
+        item.photo = req.file.filename;
+        res.status(200).send('Photo updated');
+    } else {
+        res.status(400).send('No photo uploaded');
+    }
+});
+
+app.delete('/inventory/:id', (req, res) => {
+    const index = inventory.findIndex(i => i.id === req.params.id);
+    if (index === -1) return res.status(404).send('Not Found');
+
+    inventory.splice(index, 1);
+    res.status(200).send('Deleted');
+});
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
