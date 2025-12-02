@@ -1,6 +1,6 @@
 {
 	"info": {
-		"name": "Lab 6 Inventory Service",
+		"name": "Full Inventory Lab 6 (10 endpoints)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,13 +9,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/inventory",
-					"protocol": "http",
-					"host": ["localhost"],
-					"port": "3000",
-					"path": ["inventory"]
-				}
+				"url": "http://localhost:3000/inventory"
 			}
 		},
 		{
@@ -31,17 +25,11 @@
 						{ "key": "photo", "type": "file", "src": [] }
 					]
 				},
-				"url": {
-					"raw": "http://localhost:3000/register",
-					"protocol": "http",
-					"host": ["localhost"],
-					"port": "3000",
-					"path": ["register"]
-				}
+				"url": "http://localhost:3000/register"
 			}
 		},
 		{
-			"name": "3. Search Item",
+			"name": "3. Search Item (API)",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -52,13 +40,7 @@
 						{ "key": "has_photo", "value": "on", "type": "text" }
 					]
 				},
-				"url": {
-					"raw": "http://localhost:3000/search",
-					"protocol": "http",
-					"host": ["localhost"],
-					"port": "3000",
-					"path": ["search"]
-				}
+				"url": "http://localhost:3000/search"
 			}
 		},
 		{
@@ -66,27 +48,67 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/inventory/ВСТАВ_ID_СЮДИ",
-					"protocol": "http",
-					"host": ["localhost"],
-					"port": "3000",
-					"path": ["inventory", "ВСТАВ_ID_СЮДИ"]
-				}
+				"url": "http://localhost:3000/inventory/ВСТАВ_ID_СЮДИ"
 			}
 		},
 		{
-			"name": "5. Delete Item",
+			"name": "5. Update Item Info (PUT)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{ "key": "Content-Type", "value": "application/json", "type": "text" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Updated Name\",\n    \"description\": \"Updated Description\"\n}"
+				},
+				"url": "http://localhost:3000/inventory/ВСТАВ_ID_СЮДИ"
+			}
+		},
+		{
+			"name": "6. Get Item Photo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3000/inventory/ВСТАВ_ID_СЮДИ/photo"
+			}
+		},
+		{
+			"name": "7. Update Item Photo (PUT)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{ "key": "photo", "type": "file", "src": [] }
+					]
+				},
+				"url": "http://localhost:3000/inventory/ВСТАВ_ID_СЮДИ/photo"
+			}
+		},
+		{
+			"name": "8. Delete Item",
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/inventory/ВСТАВ_ID_СЮДИ",
-					"protocol": "http",
-					"host": ["localhost"],
-					"port": "3000",
-					"path": ["inventory", "ВСТАВ_ID_СЮДИ"]
-				}
+				"url": "http://localhost:3000/inventory/ВСТАВ_ID_СЮДИ"
+			}
+		},
+		{
+			"name": "9. Get Register Page (HTML)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3000/RegisterForm.html"
+			}
+		},
+		{
+			"name": "10. Get Search Page (HTML)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3000/SearchForm.html"
 			}
 		}
 	]
