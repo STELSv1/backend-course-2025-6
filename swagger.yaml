@@ -7,13 +7,13 @@ servers:
 paths:
   /inventory:
     get:
-      summary: Get all items
+      summary: 1. Get all items
       responses:
         '200':
-          description: List of items
+          description: List of items returned successfully
   /register:
     post:
-      summary: Register new item
+      summary: 2. Register new item (with photo)
       requestBody:
         content:
           multipart/form-data:
@@ -29,10 +29,12 @@ paths:
                   format: binary
       responses:
         '201':
-          description: Created
+          description: Created successfully
+        '400':
+          description: Bad Request (missing name)
   /search:
     post:
-      summary: Search item
+      summary: 3. Search item by ID
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -43,12 +45,15 @@ paths:
                   type: string
                 has_photo:
                   type: string
+                  enum: ['on', 'off']
       responses:
         '200':
-          description: Found
+          description: Item found
+        '404':
+          description: Not Found
   /inventory/{id}:
     get:
-      summary: Get item details
+      summary: 4. Get item details by ID
       parameters:
         - name: id
           in: path
@@ -61,7 +66,7 @@ paths:
         '404':
           description: Not Found
     put:
-      summary: Update item details
+      summary: 5. Update item details (text)
       parameters:
         - name: id
           in: path
@@ -80,9 +85,11 @@ paths:
                   type: string
       responses:
         '200':
-          description: Updated
+          description: Updated successfully
+        '404':
+          description: Not Found
     delete:
-      summary: Delete item
+      summary: 8. Delete item
       parameters:
         - name: id
           in: path
@@ -91,4 +98,67 @@ paths:
             type: string
       responses:
         '200':
-          description: Deleted
+          description: Deleted successfully
+        '404':
+          description: Not Found
+  /inventory/{id}/photo:
+    get:
+      summary: 6. Get item photo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Photo image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not Found
+    put:
+      summary: 7. Update item photo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Photo updated
+        '404':
+          description: Not Found
+  /RegisterForm.html:
+    get:
+      summary: 9. Get Registration HTML Form
+      responses:
+        '200':
+          description: HTML Page
+          content:
+            text/html:
+              schema:
+                type: string
+  /SearchForm.html:
+    get:
+      summary: 10. Get Search HTML Form
+      responses:
+        '200':
+          description: HTML Page
+          content:
+            text/html:
+              schema:
+                type: string
